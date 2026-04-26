@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Development Activity Report — Madaen Star Group</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@300;400;500;600&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root {
+  --blue-900:#0D2B4E; --blue-800:#1A3F6F; --blue-700:#2258A0;
+  --blue-600:#2E6CC7; --blue-500:#4A85D8; --blue-400:#7AAEE8;
+  --blue-100:#E8F1FB; --blue-50:#F4F8FE;
+  --gray-900:#1C2333; --gray-700:#3D4A5C; --gray-500:#6B7A8D;
+  --gray-300:#B8C4D0; --gray-200:#D8E0E8; --gray-100:#EEF2F6; --gray-50:#F7F9FB;
+  --white:#FFFFFF;
+  --green:#1A7A4A; --green-bg:#E8F5EE; --green-border:#A8D8BC;
+  --amber:#8A5A00; --amber-bg:#FEF3DC; --amber-border:#F0C060;
+  --red:#B02020; --red-bg:#FDEAEA; --red-border:#E89090;
+  --orange:#7A3A00; --orange-bg:#FEF0E4; --orange-border:#E8A870;
+  --font-display:'Libre Baskerville',Georgia,serif;
+  --font-body:'Source Sans 3',system-ui,sans-serif;
+  --font-mono:'Source Code Pro',monospace;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.08);
+  --shadow:0 2px 8px rgba(0,0,0,0.10);
+  --shadow-lg:0 4px 20px rgba(0,0,0,0.12);
+  --radius:10px; --radius-sm:6px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:14px;scroll-behavior:smooth;}
+body{background:var(--gray-50);color:var(--gray-900);font-family:var(--font-body);min-height:100vh;}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--blue-900);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,0.2);}
+.topbar-brand{display:flex;align-items:center;gap:14px;}
+.topbar-logo{width:32px;height:32px;background:var(--blue-600);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:14px;color:var(--white);font-weight:700;}
+.topbar-title{font-family:var(--font-display);font-size:15px;color:var(--white);letter-spacing:0.01em;}
+.topbar-title span{color:var(--blue-400);font-weight:400;}
+.topbar-meta{display:flex;align-items:center;gap:12px;font-size:12px;color:rgba(255,255,255,0.6);}
+.badge{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);padding:3px 10px;border-radius:20px;font-size:11px;color:rgba(255,255,255,0.8);}
+
+/* ── TABS ── */
+.nav-tabs{background:var(--white);border-bottom:1px solid var(--gray-200);padding:0 2rem;display:flex;gap:0;box-shadow:var(--shadow-sm);}
+.nav-tab{padding:14px 18px;font-size:13px;font-weight:500;color:var(--gray-500);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;letter-spacing:0.01em;}
+.nav-tab:hover{color:var(--blue-700);}
+.nav-tab.active{color:var(--blue-700);border-bottom-color:var(--blue-600);font-weight:600;}
+
+/* ── LAYOUT ── */
+.page{display:none;padding:1.8rem 2rem;max-width:1500px;margin:0 auto;}
+.page.active{display:block;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;}
+.grid6{display:grid;grid-template-columns:repeat(6,1fr);gap:1rem;}
+
+/* ── CARDS ── */
+.card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius);padding:1.4rem;box-shadow:var(--shadow-sm);}
+.card-title{font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--gray-500);margin-bottom:1rem;display:flex;align-items:center;gap:8px;}
+.card-title::after{content:'';flex:1;height:1px;background:var(--gray-200);}
+
+/* ── KPI CARDS ── */
+.kpi{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius);padding:1.2rem 1.4rem;border-top:3px solid var(--blue-600);box-shadow:var(--shadow-sm);transition:transform 0.2s;}
+.kpi:hover{transform:translateY(-2px);box-shadow:var(--shadow);}
+.kpi-label{font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--gray-500);margin-bottom:8px;}
+.kpi-value{font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--blue-900);line-height:1;}
+.kpi-sub{font-size:11px;color:var(--gray-500);margin-top:5px;}
+.kpi.green{border-top-color:var(--green);}
+.kpi.green .kpi-value{color:var(--green);}
+.kpi.amber{border-top-color:#C07800;}
+.kpi.amber .kpi-value{color:var(--amber);}
+.kpi.red{border-top-color:var(--red);}
+.kpi.red .kpi-value{color:var(--red);}
+.kpi.orange{border-top-color:#B05000;}
+.kpi.orange .kpi-value{color:var(--orange);}
+
+/* ── SECTION TITLE ── */
+.sec-title{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--gray-500);margin-bottom:1rem;margin-top:1.8rem;display:flex;align-items:center;gap:10px;}
+.sec-title::before{content:'';width:3px;height:14px;background:var(--blue-600);border-radius:2px;}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--gray-200);}
+
+/* ── FLAG PANELS ── */
+.flag-panel{border-radius:var(--radius);overflow:hidden;margin-bottom:1rem;border:1px solid var(--gray-200);}
+.flag-header{padding:10px 14px;font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;}
+.flag-header.red{background:var(--red-bg);color:var(--red);border-bottom:1px solid var(--red-border);}
+.flag-header.amber{background:var(--amber-bg);color:var(--amber);border-bottom:1px solid var(--amber-border);}
+.flag-header.orange{background:var(--orange-bg);color:var(--orange);border-bottom:1px solid var(--orange-border);}
+.flag-header.green{background:var(--green-bg);color:var(--green);border-bottom:1px solid var(--green-border);}
+.flag-table{width:100%;border-collapse:collapse;font-size:12px;}
+.flag-table th{padding:8px 12px;background:var(--gray-50);color:var(--gray-500);font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;text-align:left;border-bottom:1px solid var(--gray-200);}
+.flag-table td{padding:9px 12px;border-bottom:1px solid var(--gray-100);color:var(--gray-700);}
+.flag-table tr:last-child td{border-bottom:none;}
+.flag-table tr:hover td{background:var(--gray-50);}
+.empty-flag{padding:12px 14px;font-size:12px;color:var(--gray-500);font-style:italic;}
+
+/* ── PILLS ── */
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+.pill-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);}
+.pill-amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border);}
+.pill-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);}
+.pill-blue{background:var(--blue-100);color:var(--blue-800);border:1px solid var(--blue-400);}
+.pill-gray{background:var(--gray-100);color:var(--gray-500);border:1px solid var(--gray-300);}
+.pill-orange{background:var(--orange-bg);color:var(--orange);border:1px solid var(--orange-border);}
+.dot{width:5px;height:5px;border-radius:50%;display:inline-block;}
+
+/* ── CHARTS ── */
+.chart-wrap{position:relative;}
+
+/* ── FORMS ── */
+.form-grid{display:grid;gap:0.8rem;}
+.form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0.8rem;}
+.field{display:flex;flex-direction:column;gap:4px;}
+.field label{font-size:11px;font-weight:600;color:var(--gray-700);letter-spacing:0.04em;}
+.field input,.field select,.field textarea{background:var(--white);border:1px solid var(--gray-300);border-radius:var(--radius-sm);padding:8px 10px;color:var(--gray-900);font-family:var(--font-body);font-size:13px;width:100%;outline:none;transition:border-color 0.2s;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--blue-500);box-shadow:0 0 0 3px rgba(74,133,216,0.12);}
+.field input[type=date]{color-scheme:light;}
+.field textarea{resize:vertical;min-height:60px;}
+.hint{font-size:10px;color:var(--gray-500);margin-top:2px;}
+
+/* ── BUTTONS ── */
+.btn{background:var(--blue-700);color:var(--white);font-family:var(--font-body);font-size:13px;font-weight:600;padding:9px 20px;border:none;border-radius:var(--radius-sm);cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.btn:hover{background:var(--blue-800);}
+.btn:active{transform:scale(0.98);}
+.btn-ghost{background:transparent;color:var(--gray-500);border:1px solid var(--gray-300);font-family:var(--font-body);font-size:12px;padding:7px 16px;border-radius:var(--radius-sm);cursor:pointer;transition:all 0.2s;}
+.btn-ghost:hover{border-color:var(--blue-500);color:var(--blue-700);}
+.btn-sm{font-size:11px;padding:4px 10px;}
+.btn-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);font-family:var(--font-body);font-size:11px;padding:4px 10px;border-radius:var(--radius-sm);cursor:pointer;transition:all 0.2s;}
+.btn-red:hover{background:var(--red);color:var(--white);}
+
+/* ── TABLE ── */
+.tbl-wrap{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);}
+table{width:100%;border-collapse:collapse;}
+thead tr{background:var(--blue-900);}
+th{padding:11px 12px;font-size:10px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:rgba(255,255,255,0.85);text-align:left;white-space:nowrap;}
+th.r{text-align:right;}
+td{padding:11px 12px;font-size:12px;border-bottom:1px solid var(--gray-100);color:var(--gray-700);vertical-align:middle;}
+td.r{text-align:right;font-family:var(--font-mono);}
+tr:hover td{background:var(--blue-50);}
+tr:last-child td{border-bottom:none;}
+.empty-row td{text-align:center;color:var(--gray-500);padding:2.5rem;font-style:italic;}
+
+/* ── WEEKLY UPDATE ── */
+.wu-section{margin-bottom:1.4rem;}
+.wu-header{background:var(--blue-800);color:var(--white);padding:10px 16px;border-radius:var(--radius-sm) var(--radius-sm) 0 0;font-size:12px;font-weight:600;letter-spacing:0.04em;}
+.wu-body{background:var(--white);border:1px solid var(--gray-200);border-top:none;border-radius:0 0 var(--radius-sm) var(--radius-sm);padding:1.2rem;}
+.wu-auto{background:var(--blue-50);border:1px solid var(--blue-100);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:10px;}
+.wu-auto-label{font-size:10px;font-weight:700;color:var(--blue-700);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;}
+.wu-auto-item{font-size:12px;color:var(--gray-700);padding:3px 0;display:flex;align-items:center;gap:8px;}
+.wu-auto-item.done{color:var(--green);}
+.wu-auto-item.high{color:var(--red);font-weight:600;}
+
+/* ── USER GUIDE ── */
+.guide-section{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius);margin-bottom:1.2rem;overflow:hidden;}
+.guide-hdr{background:var(--blue-900);color:var(--white);padding:12px 16px;font-size:12px;font-weight:600;letter-spacing:0.05em;}
+.guide-body{padding:1.2rem;}
+.guide-row{display:grid;grid-template-columns:200px 1fr;gap:1rem;padding:8px 0;border-bottom:1px solid var(--gray-100);font-size:13px;}
+.guide-row:last-child{border-bottom:none;}
+.guide-label{font-weight:600;color:var(--blue-800);}
+.guide-detail{color:var(--gray-700);line-height:1.6;}
+.colour-swatch{display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;margin:3px;}
+
+/* ── PROGRESS BAR ── */
+.prog-wrap{margin-top:1rem;}
+.prog-label{display:flex;justify-content:space-between;font-size:11px;color:var(--gray-500);margin-bottom:4px;}
+.prog-track{height:6px;background:var(--gray-200);border-radius:3px;}
+.prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--blue-600),var(--blue-400));transition:width 0.5s;}
+
+/* ── PRINT ── */
+@media print{
+  .topbar,.nav-tabs,.no-print{display:none!important;}
+  .page{display:block!important;padding:1rem;}
+  body{background:#fff;}
+  .card,.kpi,.tbl-wrap,.flag-panel{box-shadow:none;border:1px solid #ccc;}
+}
+
+@media(max-width:1100px){
+  .grid6{grid-template-columns:repeat(3,1fr);}
+  .grid4{grid-template-columns:repeat(2,1fr);}
+  .grid3{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-brand">
+    <div class="topbar-logo">MS</div>
+    <div class="topbar-title">Madaen Star Group &nbsp;/&nbsp; <span>IT Development Activity Report</span></div>
+  </div>
+  <div class="topbar-meta no-print">
+    <div class="badge" id="top-date"></div>
+    <div class="badge" id="top-total"></div>
+    <button class="btn-ghost" style="color:rgba(255,255,255,0.7);border-color:rgba(255,255,255,0.2);" onclick="exportReport()">Export Report</button>
+  </div>
+</div>
+
+<!-- NAV TABS -->
+<div class="nav-tabs no-print">
+  <div class="nav-tab active" onclick="showTab('dashboard')" id="tab-dashboard">Dashboard</div>
+  <div class="nav-tab" onclick="showTab('log')" id="tab-log">Activity Log</div>
+  <div class="nav-tab" onclick="showTab('weekly')" id="tab-weekly">Weekly Update</div>
+  <div class="nav-tab" onclick="showTab('guide')" id="tab-guide">User Guide</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     DASHBOARD
+══════════════════════════════════════ -->
+<div class="page active" id="page-dashboard">
+
+  <div class="grid6" style="margin-bottom:1.4rem;">
+    <div class="kpi"><div class="kpi-label">Total Tasks</div><div class="kpi-value" id="kpi-total">0</div><div class="kpi-sub">All logged activities</div></div>
+    <div class="kpi green"><div class="kpi-label">Completed</div><div class="kpi-value" id="kpi-done">0</div><div class="kpi-sub">Marked Done</div></div>
+    <div class="kpi amber"><div class="kpi-label">In Progress</div><div class="kpi-value" id="kpi-inproc">0</div><div class="kpi-sub">Active tasks</div></div>
+    <div class="kpi red"><div class="kpi-label">High Priority</div><div class="kpi-value" id="kpi-high">0</div><div class="kpi-sub">Open & high priority</div></div>
+    <div class="kpi red"><div class="kpi-label">Overdue</div><div class="kpi-value" id="kpi-overdue">0</div><div class="kpi-sub">Past target date</div></div>
+    <div class="kpi orange"><div class="kpi-label">Missing Close Date</div><div class="kpi-value" id="kpi-missing">0</div><div class="kpi-sub">Done, no close date</div></div>
+  </div>
+
+  <!-- Completion bar -->
+  <div class="card" style="margin-bottom:1.4rem;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <span style="font-size:13px;font-weight:600;color:var(--blue-900);">Overall Completion</span>
+      <span id="comp-pct" style="font-family:var(--font-mono);font-size:13px;color:var(--blue-700);font-weight:600;">0%</span>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="comp-bar" style="width:0%"></div></div>
+  </div>
+
+  <!-- Charts row 1 -->
+  <div class="grid3" style="margin-bottom:1.4rem;">
+    <div class="card" style="grid-column:span 1;">
+      <div class="card-title">Status Distribution</div>
+      <div class="chart-wrap" style="height:200px;"><canvas id="chart-status"></canvas></div>
+    </div>
+    <div class="card" style="grid-column:span 1;">
+      <div class="card-title">Priority Breakdown</div>
+      <div class="chart-wrap" style="height:200px;"><canvas id="chart-priority"></canvas></div>
+    </div>
+    <div class="card" style="grid-column:span 1;">
+      <div class="card-title">Open Tasks — On Track vs Overdue</div>
+      <div class="chart-wrap" style="height:200px;"><canvas id="chart-ontrack"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Monthly bar chart -->
+  <div class="card" style="margin-bottom:1.4rem;">
+    <div class="card-title">Monthly Activity — 2026 (per month, not cumulative)</div>
+    <div class="chart-wrap" style="height:240px;"><canvas id="chart-monthly"></canvas></div>
+  </div>
+
+  <!-- Flag sections -->
+  <div class="grid2">
+    <div>
+      <div class="sec-title">High Priority — Open Tasks</div>
+      <div class="flag-panel">
+        <div class="flag-header red">⚑ Requires Immediate Attention</div>
+        <div id="flag-high-body"></div>
+      </div>
+
+      <div class="sec-title">Overdue — Past Target Date</div>
+      <div class="flag-panel">
+        <div class="flag-header amber">⚠ Past Scheduled Completion</div>
+        <div id="flag-overdue-body"></div>
+      </div>
+    </div>
+    <div>
+      <div class="sec-title">Done — Missing Actual Close Date</div>
+      <div class="flag-panel">
+        <div class="flag-header orange">✎ Please Update Close Date</div>
+        <div id="flag-missing-body"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════
+     ACTIVITY LOG
+══════════════════════════════════════ -->
+<div class="page" id="page-log">
+
+  <!-- Add / Edit Task Form -->
+  <div class="card" style="margin-bottom:1.4rem;">
+    <div id="edit-banner" style="display:none;background:#FEF3DC;border:1px solid #F0C060;border-radius:6px;padding:10px 16px;margin-bottom:1rem;align-items:center;justify-content:space-between;gap:1rem;">
+      <span style="font-size:13px;font-weight:600;color:#8A5A00;">&#9998;&nbsp; Editing: <span id="edit-banner-ref" style="font-family:monospace;"></span> &mdash; update fields and click <strong>Save Changes</strong></span>
+      <button class="btn-ghost btn-sm" onclick="cancelEdit()">&#10005; Cancel</button>
+    </div>
+    <div class="card-title" id="form-card-title">Add New Task</div>
+    <div class="form-grid">
+      <div class="form-row">
+        <div class="field"><label>Reference No.</label><input type="text" id="f-ref" placeholder="e.g. 2026/016"></div>
+        <div class="field"><label>Date Added</label><input type="date" id="f-date"></div>
+        <div class="field"><label>Priority</label>
+          <select id="f-priority"><option value="">Select…</option><option value="High">High</option><option value="Medium">Medium</option><option value="Low">Low</option></select>
+        </div>
+        <div class="field"><label>Status</label>
+          <select id="f-status"><option value="In Process">In Process</option><option value="Done">Done</option><option value="On Hold">On Hold</option><option value="Cancelled">Cancelled</option></select>
+        </div>
+        <div class="field"><label>Target Date</label><input type="date" id="f-target"></div>
+        <div class="field"><label>Actual Close Date</label><input type="date" id="f-close"></div>
+      </div>
+      <div class="form-row">
+        <div class="field" style="grid-column:span 2;"><label>Activity / Work Performed</label><input type="text" id="f-activity" placeholder="Describe the task…"></div>
+        <div class="field" style="grid-column:span 2;"><label>Output / Result</label><input type="text" id="f-output" placeholder="Current output or result…"></div>
+        <div class="field" style="grid-column:span 2;"><label>Remarks / Blockers</label><input type="text" id="f-remarks" placeholder="Any blockers or notes…"></div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:0.8rem;">
+        <button class="btn-ghost" id="btn-cancel" onclick="cancelEdit()">Clear</button>
+        <button class="btn" id="btn-submit" onclick="addTask()">Add Task</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Task Table -->
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Ref.</th><th>Date Added</th><th>Activity</th><th>Output / Result</th>
+          <th>Status</th><th>Priority</th><th>Close Date</th>
+          <th class="r">Days Open</th><th>Target Date</th><th>Remarks</th><th></th>
+        </tr>
+      </thead>
+      <tbody id="task-tbody"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════
+     WEEKLY UPDATE
+══════════════════════════════════════ -->
+<div class="page" id="page-weekly">
+
+  <div class="grid2" style="margin-bottom:1.4rem;align-items:start;">
+    <div class="card">
+      <div class="card-title">Report Details</div>
+      <div class="form-row" style="margin-bottom:1rem;">
+        <div class="field"><label>Week Ending (Thursday)</label><input type="date" id="wu-date" onchange="renderWeekly()"></div>
+        <div class="field"><label>Prepared By</label><input type="text" id="wu-preparer" value="Mubashir Hasan"></div>
+      </div>
+      <div style="display:flex;gap:0.8rem;justify-content:flex-end;" class="no-print">
+        <button class="btn-ghost" onclick="window.print()">Print Report</button>
+        <button class="btn" onclick="exportWeekly()">Export as HTML</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Auto Summary — This Week</div>
+      <div id="wu-summary-auto"></div>
+    </div>
+  </div>
+
+  <div class="wu-section">
+    <div class="wu-header">1. Progress Summary (Auto-calculated)</div>
+    <div class="wu-body"><div id="wu-section1"></div></div>
+  </div>
+
+  <div class="wu-section">
+    <div class="wu-header">2. Key Accomplishments This Week (Auto — Done tasks)</div>
+    <div class="wu-body"><div id="wu-section2"></div>
+      <div class="field" style="margin-top:10px;"><label>Additional narrative / context</label><textarea id="wu-narrative" rows="3" placeholder="Add any context or highlights…"></textarea></div>
+    </div>
+  </div>
+
+  <div class="wu-section">
+    <div class="wu-header">3. Blockers & Issues</div>
+    <div class="wu-body">
+      <div class="field" style="margin-bottom:10px;"><label>Current blockers</label><textarea id="wu-blockers" rows="3" placeholder="Describe current blockers…"></textarea></div>
+      <div class="field"><label>Decision / support needed from management</label><textarea id="wu-mgmt" rows="3" placeholder="What do you need from management?"></textarea></div>
+    </div>
+  </div>
+
+  <div class="wu-section">
+    <div class="wu-header">4. Plan for Next Week</div>
+    <div class="wu-body">
+      <div class="field" style="margin-bottom:10px;"><label>Priority tasks for next week</label><textarea id="wu-next" rows="3" placeholder="List priority tasks…"></textarea></div>
+      <div class="field"><label>Expected completions</label><textarea id="wu-expected" rows="2" placeholder="Which tasks do you expect to complete?"></textarea></div>
+    </div>
+  </div>
+
+  <div class="wu-section">
+    <div class="wu-header">5. Items for Management Attention (Auto — High Priority + Manual flags)</div>
+    <div class="wu-body"><div id="wu-section5"></div>
+      <div class="field" style="margin-top:10px;"><label>Additional risks / flags</label><textarea id="wu-flags" rows="3" placeholder="Any additional items for management attention…"></textarea></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════
+     USER GUIDE
+══════════════════════════════════════ -->
+<div class="page" id="page-guide">
+
+  <div class="guide-section">
+    <div class="guide-hdr">Overview</div>
+    <div class="guide-body">
+      <div class="guide-row"><div class="guide-label">Purpose</div><div class="guide-detail">Tracks all IT development activities for Madaen Star Group. Four tabs: Dashboard, Activity Log, Weekly Update, User Guide.</div></div>
+      <div class="guide-row"><div class="guide-label">Who updates</div><div class="guide-detail">Mubashir Hasan — updates Activity Log daily. Completes and submits Weekly Update every Thursday.</div></div>
+      <div class="guide-row"><div class="guide-label">Who reviews</div><div class="guide-detail">Management reviews the Dashboard and Weekly Update tabs.</div></div>
+      <div class="guide-row"><div class="guide-label">Data storage</div><div class="guide-detail">All data is saved automatically in your browser. Do not clear browser data or use incognito mode — this will erase your task history.</div></div>
+    </div>
+  </div>
+
+  <div class="guide-section">
+    <div class="guide-hdr">Tab 1 — Dashboard</div>
+    <div class="guide-body">
+      <div class="guide-row"><div class="guide-label">Purpose</div><div class="guide-detail">Executive summary view. All data is automatic — do not edit directly.</div></div>
+      <div class="guide-row"><div class="guide-label">KPI Cards</div><div class="guide-detail">Six cards update live: Total, Completed, In Progress, High Priority Open, Overdue, and Missing Close Date.</div></div>
+      <div class="guide-row"><div class="guide-label">Monthly Chart</div><div class="guide-detail">Shows Added, Completed, and Pending per month (non-cumulative). Added = Date Added field. Completed = Actual Close Date field. Pending = tasks In Process at end of that month.</div></div>
+      <div class="guide-row"><div class="guide-label">Flag Sections</div><div class="guide-detail">High Priority (open tasks), Overdue (past target), and Missing Close Date (done tasks without close date) — all update automatically.</div></div>
+    </div>
+  </div>
+
+  <div class="guide-section">
+    <div class="guide-hdr">Tab 2 — Activity Log</div>
+    <div class="guide-body">
+      <div class="guide-row"><div class="guide-label">Adding a task</div><div class="guide-detail">Fill in the form at the top and click "Add Task". The task appears immediately at the top of the table. No row insertion needed.</div></div>
+      <div class="guide-row"><div class="guide-label">Reference number</div><div class="guide-detail">Follow the sequence: 2026/016, 2026/017 etc. The next reference number is suggested automatically.</div></div>
+      <div class="guide-row"><div class="guide-label">Date format</div><div class="guide-detail">Use the date picker — dates are stored and displayed as DD-MMM-YYYY (e.g. 01-Apr-2026).</div></div>
+      <div class="guide-row"><div class="guide-label">Days Open</div><div class="guide-detail">Calculated automatically. Done + close date = close date minus start date. Open tasks = today minus start date. Done without close date = shows ⚠.</div></div>
+      <div class="guide-row"><div class="guide-label">Actual Close Date</div><div class="guide-detail">MANDATORY when marking a task Done. Without it the monthly chart cannot count completions and the dashboard will show it as missing.</div></div>
+      <div class="guide-row"><div class="guide-label">Editing a task</div><div class="guide-detail">Click the Edit button on any row to load it back into the form. Make changes and click Update Task.</div></div>
+    </div>
+  </div>
+
+  <div class="guide-section">
+    <div class="guide-hdr">Tab 3 — Weekly Update</div>
+    <div class="guide-body">
+      <div class="guide-row"><div class="guide-label">When to complete</div><div class="guide-detail">Every Thursday before submitting to management.</div></div>
+      <div class="guide-row"><div class="guide-label">Week-end date</div><div class="guide-detail">Select the Thursday date using the date picker. Sections 1, 2, and 5 update automatically.</div></div>
+      <div class="guide-row"><div class="guide-label">Auto sections</div><div class="guide-detail">Sections 1 (Summary counts), 2 (Done tasks list), and 5 (High Priority open tasks) populate from the Activity Log automatically.</div></div>
+      <div class="guide-row"><div class="guide-label">Manual sections</div><div class="guide-detail">Sections 3 (Blockers), 4 (Next Week Plan), and narrative fields must be typed manually each week.</div></div>
+      <div class="guide-row"><div class="guide-label">Export</div><div class="guide-detail">Click "Export as HTML" to save a standalone printable report. Click "Print Report" to print directly.</div></div>
+    </div>
+  </div>
+
+  <div class="guide-section">
+    <div class="guide-hdr">Colour Coding Legend</div>
+    <div class="guide-body" style="padding:1rem 1.2rem;">
+      <span class="colour-swatch pill pill-green">● Green — Done / Completed</span>
+      <span class="colour-swatch pill pill-amber">● Amber — In Process / normal</span>
+      <span class="colour-swatch pill pill-red">● Red — High Priority or Overdue</span>
+      <span class="colour-swatch pill pill-orange">● Orange — Done, missing close date</span>
+      <span class="colour-swatch pill pill-gray">● Gray — Low priority</span>
+      <span class="colour-swatch pill pill-blue">● Blue — On Hold</span>
+    </div>
+  </div>
+
+  <div class="guide-section">
+    <div class="guide-hdr" style="background:var(--red);color:var(--white);">Important Rules</div>
+    <div class="guide-body">
+      <div class="guide-row"><div class="guide-label">Close date is mandatory</div><div class="guide-detail">Always fill Actual Close Date when marking a task Done. The chart and dashboard depend on this field.</div></div>
+      <div class="guide-row"><div class="guide-label">Do not clear browser data</div><div class="guide-detail">All tasks are stored in browser localStorage. Clearing browser data will permanently delete all tasks.</div></div>
+      <div class="guide-row"><div class="guide-label">Use the same browser</div><div class="guide-detail">Data is stored per browser. Always open the file in the same browser to see your data.</div></div>
+      <div class="guide-row"><div class="guide-label">Backup regularly</div><div class="guide-detail">Use "Export Report" from the top bar to save a backup of your data periodically.</div></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// STATE & STORAGE
+// ═══════════════════════════════════════════════════════════
+const STORAGE_KEY = 'madaen_it_tasks_v1';
+
+function lastDayOfMonth(year, month) {
+  return new Date(year, month + 1, 0);
+}
+
+const DEFAULT_TASKS = [
+  {id:1,ref:'2026/001',date:'2026-01-01',activity:'Project Documentation',output:'Under review.',status:'In Process',priority:'High',close:'',target:'2026-02-26',remarks:'Awaiting Mr. Maizan to review and approve.'},
+  {id:2,ref:'2026/002',date:'2026-01-01',activity:'User Activity Dashboard',output:'Data verification and modification in process.',status:'In Process',priority:'High',close:'',target:'',remarks:'Waiting Intelligent Property testing before deploying on live.'},
+  {id:3,ref:'2026/003',date:'2026-01-01',activity:'Intelligent Property Updated Patch Testing',output:'Session scheduled with end user.',status:'In Process',priority:'High',close:'',target:'2026-05-23',remarks:''},
+  {id:4,ref:'2026/004',date:'2026-01-01',activity:'Masta Customer Receipt',output:'Waiting for decision — in-house vs Tamkeen addon.',status:'In Process',priority:'Medium',close:'',target:'2026-03-15',remarks:'Focused on completing this week.'},
+  {id:5,ref:'2026/005',date:'2026-01-01',activity:'Fungate Fixed Asset Disposal Sales Setup',output:'Completed.',status:'Done',priority:'Low',close:'2026-01-31',target:'',remarks:''},
+  {id:6,ref:'2026/006',date:'2026-01-01',activity:'Real-Estate Contracts Creation Issue',output:'Resolved.',status:'Done',priority:'Medium',close:'2026-01-31',target:'',remarks:''},
+  {id:7,ref:'2026/007',date:'2026-01-01',activity:'Real-Estate Projects Cost Adjustment',output:'Tested on UAT, updated on production. Will close once verified by end user.',status:'Done',priority:'Medium',close:'2026-01-31',target:'',remarks:''},
+  {id:8,ref:'2026/008',date:'2026-01-01',activity:'Real-Estate Unbilled Invoices 2024',output:'Waiting to discuss with end user.',status:'In Process',priority:'High',close:'',target:'2026-05-23',remarks:'Partially settled. Hada Plaza invoices need reference in billing schedule.'},
+  {id:9,ref:'2026/009',date:'2026-01-01',activity:'Ibrahim Alhudith Investment Invoices Issuance',output:'Resolved.',status:'Done',priority:'Medium',close:'2026-01-31',target:'',remarks:''},
+  {id:10,ref:'2026/010',date:'2026-01-01',activity:'Ibrahim Alhudith E-invoice System Implementation',output:'Agreement done, system setup in process.',status:'In Process',priority:'High',close:'',target:'',remarks:''},
+  {id:11,ref:'2026/011',date:'2026-01-01',activity:'Fungate Toys Items Creation',output:'Completed.',status:'Done',priority:'Low',close:'2026-01-31',target:'',remarks:''},
+  {id:12,ref:'2026/012',date:'2026-01-01',activity:'Fungate Purchase Order Workflow',output:'Mr. Awady wants to add Murooj Baker to PO workflow on step 1.',status:'Done',priority:'Medium',close:'2026-01-31',target:'',remarks:'Awaiting Mr. Maizan consent.'},
+  {id:13,ref:'2026/013',date:'2026-02-01',activity:'New Projects Items Setup',output:'Completed.',status:'Done',priority:'Low',close:'2026-02-28',target:'',remarks:''},
+  {id:14,ref:'2026/014',date:'2026-02-01',activity:'Electricity Integration Processing Issue',output:'Authentication error — debugging Azure setup.',status:'Done',priority:'Medium',close:'2026-02-28',target:'',remarks:''},
+  {id:15,ref:'2026/015',date:'2026-02-01',activity:'ZATCA Latest Package Validation',output:'Package deployed on UAT and tested. Will verify for MRS Company then activate on production.',status:'In Process',priority:'High',close:'',target:'2026-05-23',remarks:'After validation tasks 2026/003 and 2026/008 will run in parallel.'},
+];
+
+let tasks = [];
+let editingId = null;
+let charts = {};
+
+function loadTasks() {
+  try {
+    const s = localStorage.getItem(STORAGE_KEY);
+    tasks = s ? JSON.parse(s) : [...DEFAULT_TASKS];
+  } catch(e) { tasks = [...DEFAULT_TASKS]; }
+}
+
+function saveTasks() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+}
+
+// ═══════════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════════
+const today = new Date(); today.setHours(0,0,0,0);
+
+function parseDate(str) {
+  if (!str) return null;
+  const d = new Date(str);
+  return isNaN(d) ? null : d;
+}
+
+function fmtDate(str) {
+  const d = parseDate(str);
+  if (!d) return '—';
+  return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}).replace(/ /g,'-');
+}
+
+function daysOpen(task) {
+  const start = parseDate(task.date);
+  if (!start) return '—';
+  if (task.status === 'Done') {
+    const close = parseDate(task.close);
+    if (!close) return '⚠';
+    return Math.max(0, Math.round((close - start) / 86400000));
+  }
+  return Math.max(0, Math.round((today - start) / 86400000));
+}
+
+function isOverdue(task) {
+  if (task.status === 'Done') return false;
+  const tgt = parseDate(task.target);
+  return tgt && tgt < today;
+}
+
+function nextRef() {
+  if (tasks.length === 0) return '2026/001';
+  const nums = tasks.map(t => parseInt((t.ref||'').split('/')[1]||0)).filter(n=>!isNaN(n));
+  const max = nums.length ? Math.max(...nums) : 0;
+  return `2026/${String(max+1).padStart(3,'0')}`;
+}
+
+function statusPill(s) {
+  const map = {
+    'Done':'pill-green','In Process':'pill-amber',
+    'On Hold':'pill-blue','Cancelled':'pill-gray'
+  };
+  return `<span class="pill ${map[s]||'pill-gray'}">${s}</span>`;
+}
+
+function priorityPill(p) {
+  const map = {'High':'pill-red','Medium':'pill-amber','Low':'pill-gray'};
+  return `<span class="pill ${map[p]||'pill-gray'}">${p}</span>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════
+function showTab(tab) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+tab).classList.add('active');
+  document.getElementById('tab-'+tab).classList.add('active');
+  if (tab==='dashboard') renderDashboard();
+  if (tab==='log')       renderTaskTable();
+  if (tab==='weekly')    renderWeekly();
+}
+
+// ═══════════════════════════════════════════════════════════
+// TASK CRUD
+// ═══════════════════════════════════════════════════════════
+function addTask() {
+  const ref      = document.getElementById('f-ref').value.trim();
+  const date     = document.getElementById('f-date').value;
+  const priority = document.getElementById('f-priority').value;
+  const status   = document.getElementById('f-status').value;
+  const target   = document.getElementById('f-target').value;
+  const close    = document.getElementById('f-close').value;
+  const activity = document.getElementById('f-activity').value.trim();
+  const output   = document.getElementById('f-output').value.trim();
+  const remarks  = document.getElementById('f-remarks').value.trim();
+
+  if (!ref || !date || !priority || !activity) {
+    alert('Please fill in: Reference, Date, Priority, and Activity.'); return;
+  }
+
+  if (editingId !== null) {
+    // UPDATE existing task
+    const idx = tasks.findIndex(t=>t.id===editingId);
+    if (idx !== -1) {
+      tasks[idx] = {...tasks[idx],ref,date,priority,status,target,close,activity,output,remarks};
+    }
+    editingId = null;
+    setFormMode('add');
+  } else {
+    // ADD new task
+    const id = Date.now();
+    tasks.unshift({id,ref,date,priority,status,target,close,activity,output,remarks});
+  }
+
+  saveTasks();
+  renderTaskTable();
+  renderDashboard();
+  resetForm();
+}
+
+function editTask(id) {
+  const t = tasks.find(x=>x.id===id);
+  if (!t) return;
+  // Switch to Activity Log tab if not already there
+  showTab('log');
+  editingId = id;
+  // Populate all form fields
+  document.getElementById('f-ref').value      = t.ref||'';
+  document.getElementById('f-date').value     = t.date||'';
+  document.getElementById('f-priority').value = t.priority||'';
+  document.getElementById('f-status').value   = t.status||'In Process';
+  document.getElementById('f-target').value   = t.target||'';
+  document.getElementById('f-close').value    = t.close||'';
+  document.getElementById('f-activity').value = t.activity||'';
+  document.getElementById('f-output').value   = t.output||'';
+  document.getElementById('f-remarks').value  = t.remarks||'';
+  // Switch form to edit mode
+  setFormMode('edit', t.ref||id);
+  // Scroll form into view
+  setTimeout(()=>{ document.getElementById('edit-banner').scrollIntoView({behavior:'smooth',block:'start'}); }, 100);
+}
+
+function cancelEdit() {
+  editingId = null;
+  setFormMode('add');
+  resetForm();
+}
+
+function setFormMode(mode, ref) {
+  const banner   = document.getElementById('edit-banner');
+  const title    = document.getElementById('form-card-title');
+  const btnSubmit= document.getElementById('btn-submit');
+  const btnCancel= document.getElementById('btn-cancel');
+  if (mode === 'edit') {
+    banner.style.display = 'flex';
+    document.getElementById('edit-banner-ref').textContent = ref||'';
+    title.textContent = 'Edit Task';
+    btnSubmit.textContent = 'Save Changes';
+    btnCancel.textContent = 'Cancel Edit';
+  } else {
+    banner.style.display = 'none';
+    title.textContent = 'Add New Task';
+    btnSubmit.textContent = 'Add Task';
+    btnCancel.textContent = 'Clear';
+  }
+}
+
+function deleteTask(id) {
+  if (!confirm('Delete this task? This cannot be undone.')) return;
+  tasks = tasks.filter(t=>t.id!==id);
+  saveTasks();
+  renderTaskTable();
+  renderDashboard();
+}
+
+function resetForm() {
+  ['f-ref','f-date','f-priority','f-target','f-close','f-activity','f-output','f-remarks'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.value='';
+  });
+  document.getElementById('f-status').value='In Process';
+  document.getElementById('f-ref').value = nextRef();
+  document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+  editingId = null;
+}
+
+function clearForm() { cancelEdit(); }
+
+// ═══════════════════════════════════════════════════════════
+// RENDER TASK TABLE
+// ═══════════════════════════════════════════════════════════
+function renderTaskTable() {
+  const tbody = document.getElementById('task-tbody');
+  if (!tasks.length) {
+    tbody.innerHTML='<tr class="empty-row"><td colspan="11">No tasks yet. Add one using the form above.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = tasks.map(t => {
+    const d = daysOpen(t);
+    const daysColor = d==='⚠'?'color:var(--orange);font-weight:600':d>30?'color:var(--red)':'';
+    const overdue = isOverdue(t);
+    const rowBg = overdue ? 'background:rgba(176,32,32,0.03)' : '';
+    return `<tr style="${rowBg}">
+      <td style="font-family:var(--font-mono);font-size:11px;font-weight:600;color:var(--blue-800);">${t.ref||'—'}</td>
+      <td style="white-space:nowrap;font-size:11px;">${fmtDate(t.date)}</td>
+      <td style="max-width:200px;"><div style="font-weight:500;">${t.activity||'—'}</div></td>
+      <td style="max-width:180px;font-size:11px;color:var(--gray-500);">${t.output||'—'}</td>
+      <td>${statusPill(t.status)}</td>
+      <td>${priorityPill(t.priority)}</td>
+      <td style="white-space:nowrap;font-size:11px;">${fmtDate(t.close)}</td>
+      <td class="r" style="${daysColor}">${d}</td>
+      <td style="white-space:nowrap;font-size:11px;${isOverdue(t)?'color:var(--red);font-weight:600':''}">${fmtDate(t.target)}</td>
+      <td style="max-width:160px;font-size:11px;color:var(--gray-500);">${t.remarks||'—'}</td>
+      <td style="white-space:nowrap;">
+        <button class="btn-ghost btn-sm" onclick="editTask(${t.id})">Edit</button>
+        <button class="btn-red" style="margin-left:4px;" onclick="deleteTask(${t.id})">Del</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER DASHBOARD
+// ═══════════════════════════════════════════════════════════
+function renderDashboard() {
+  const total    = tasks.length;
+  const done     = tasks.filter(t=>t.status==='Done').length;
+  const inproc   = tasks.filter(t=>t.status==='In Process').length;
+  const highOpen = tasks.filter(t=>t.priority==='High'&&t.status!=='Done').length;
+  const overdue  = tasks.filter(t=>isOverdue(t)).length;
+  const missing  = tasks.filter(t=>t.status==='Done'&&!t.close).length;
+  const pct      = total>0 ? Math.round(done/total*100) : 0;
+
+  document.getElementById('kpi-total').textContent   = total;
+  document.getElementById('kpi-done').textContent    = done;
+  document.getElementById('kpi-inproc').textContent  = inproc;
+  document.getElementById('kpi-high').textContent    = highOpen;
+  document.getElementById('kpi-overdue').textContent = overdue;
+  document.getElementById('kpi-missing').textContent = missing;
+  document.getElementById('comp-pct').textContent    = pct+'%';
+  document.getElementById('comp-bar').style.width    = pct+'%';
+  document.getElementById('top-total').textContent   = `${total} tasks`;
+  document.getElementById('top-date').textContent    = today.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+
+  renderFlagSection('flag-high-body',
+    tasks.filter(t=>t.priority==='High'&&t.status!=='Done'),
+    'No high priority open tasks — all clear.');
+  renderFlagSection('flag-overdue-body',
+    tasks.filter(t=>isOverdue(t)),
+    'No overdue tasks.');
+  renderFlagSection('flag-missing-body',
+    tasks.filter(t=>t.status==='Done'&&!t.close),
+    'All done tasks have close dates recorded.');
+
+  renderCharts();
+}
+
+function renderFlagSection(containerId, flagTasks, emptyMsg) {
+  const el = document.getElementById(containerId);
+  if (!flagTasks.length) {
+    el.innerHTML=`<div class="empty-flag">✓ ${emptyMsg}</div>`; return;
+  }
+  el.innerHTML=`<table class="flag-table">
+    <thead><tr><th>Ref.</th><th>Activity</th><th>Priority</th><th>Status</th><th>Target</th></tr></thead>
+    <tbody>${flagTasks.map((t,i)=>`<tr style="background:${i%2?'var(--gray-50)':'var(--white)'}">
+      <td style="font-family:var(--font-mono);font-size:11px;font-weight:600;">${t.ref}</td>
+      <td style="max-width:240px;">${t.activity}</td>
+      <td>${priorityPill(t.priority)}</td>
+      <td>${statusPill(t.status)}</td>
+      <td style="font-size:11px;${isOverdue(t)?'color:var(--red);font-weight:600':''}">${fmtDate(t.target)}</td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// CHARTS
+// ═══════════════════════════════════════════════════════════
+function destroyChart(id) { if(charts[id]){charts[id].destroy();delete charts[id];} }
+
+function renderCharts() {
+  // ── Status donut
+  destroyChart('chart-status');
+  const statusCounts = {
+    'Done': tasks.filter(t=>t.status==='Done').length,
+    'In Process': tasks.filter(t=>t.status==='In Process').length,
+    'On Hold': tasks.filter(t=>t.status==='On Hold').length,
+    'Cancelled': tasks.filter(t=>t.status==='Cancelled').length,
+  };
+  charts['chart-status'] = new Chart(document.getElementById('chart-status'),{
+    type:'doughnut',
+    data:{
+      labels:Object.keys(statusCounts),
+      datasets:[{data:Object.values(statusCounts),backgroundColor:['#1A7A4A','#C07800','#2E6CC7','#6B7A8D'],borderWidth:2,borderColor:'#fff'}]
+    },
+    options:{responsive:true,maintainAspectRatio:false,cutout:'65%',
+      plugins:{legend:{position:'right',labels:{font:{size:11},boxWidth:10,padding:8}}}}
+  });
+
+  // ── Priority donut
+  destroyChart('chart-priority');
+  const priCounts = {
+    'High': tasks.filter(t=>t.priority==='High').length,
+    'Medium': tasks.filter(t=>t.priority==='Medium').length,
+    'Low': tasks.filter(t=>t.priority==='Low').length,
+  };
+  charts['chart-priority'] = new Chart(document.getElementById('chart-priority'),{
+    type:'doughnut',
+    data:{
+      labels:Object.keys(priCounts),
+      datasets:[{data:Object.values(priCounts),backgroundColor:['#B02020','#C07800','#6B7A8D'],borderWidth:2,borderColor:'#fff'}]
+    },
+    options:{responsive:true,maintainAspectRatio:false,cutout:'65%',
+      plugins:{legend:{position:'right',labels:{font:{size:11},boxWidth:10,padding:8}}}}
+  });
+
+  // ── On track vs overdue horizontal bar
+  destroyChart('chart-ontrack');
+  const openTasks = tasks.filter(t=>t.status!=='Done'&&t.status!=='Cancelled');
+  const onTrack = openTasks.filter(t=>!isOverdue(t)).length;
+  const overdueCount = openTasks.filter(t=>isOverdue(t)).length;
+  const noTarget = openTasks.filter(t=>!t.target).length;
+  charts['chart-ontrack'] = new Chart(document.getElementById('chart-ontrack'),{
+    type:'bar',
+    data:{
+      labels:['On Track','Overdue','No Target Set'],
+      datasets:[{data:[onTrack,overdueCount,noTarget],
+        backgroundColor:['#1A7A4A','#B02020','#6B7A8D'],
+        borderRadius:4,barThickness:28}]
+    },
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{x:{ticks:{font:{size:10}},grid:{color:'rgba(0,0,0,0.05)'}},
+              y:{ticks:{font:{size:11}},grid:{display:false}}}}
+  });
+
+  // ── Monthly bar chart (non-cumulative)
+  destroyChart('chart-monthly');
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const added=[0,0,0,0,0,0,0,0,0,0,0,0];
+  const completed=[0,0,0,0,0,0,0,0,0,0,0,0];
+  const pending=[0,0,0,0,0,0,0,0,0,0,0,0];
+
+  tasks.forEach(t=>{
+    const d=parseDate(t.date);
+    if(d&&d.getFullYear()===2026) added[d.getMonth()]++;
+    const c=parseDate(t.close);
+    if(c&&c.getFullYear()===2026&&t.status==='Done') completed[c.getMonth()]++;
+  });
+
+  // Pending per month = tasks In Process at end of that month
+  for(let m=0;m<12;m++){
+    const monthEnd=new Date(2026,m+1,0); // last day of month
+    pending[m]=tasks.filter(t=>{
+      const start=parseDate(t.date);
+      if(!start||start>monthEnd) return false;
+      if(t.status!=='Done') return true; // still open
+      const close=parseDate(t.close);
+      if(!close||close>monthEnd) return true; // not yet closed by month end
+      return false;
+    }).length;
+  }
+
+  charts['chart-monthly'] = new Chart(document.getElementById('chart-monthly'),{
+    type:'bar',
+    data:{
+      labels:months,
+      datasets:[
+        {label:'Added',data:added,backgroundColor:'rgba(46,108,199,0.85)',borderRadius:3},
+        {label:'Completed',data:completed,backgroundColor:'rgba(26,122,74,0.85)',borderRadius:3},
+        {label:'Pending (In Process)',data:pending,backgroundColor:'rgba(192,120,0,0.75)',borderRadius:3},
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{font:{size:11},boxWidth:10,padding:12}}},
+      scales:{
+        x:{ticks:{font:{size:11}},grid:{display:false}},
+        y:{ticks:{font:{size:10},stepSize:1},grid:{color:'rgba(0,0,0,0.05)'}}
+      }
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════════════════
+// WEEKLY UPDATE
+// ═══════════════════════════════════════════════════════════
+function renderWeekly() {
+  const weekDate = document.getElementById('wu-date').value;
+  const weekEnd = weekDate ? new Date(weekDate) : today;
+
+  const total    = tasks.length;
+  const done     = tasks.filter(t=>t.status==='Done').length;
+  const inproc   = tasks.filter(t=>t.status==='In Process').length;
+  const highOpen = tasks.filter(t=>t.priority==='High'&&t.status!=='Done').length;
+  const missing  = tasks.filter(t=>t.status==='Done'&&!t.close).length;
+
+  // Auto summary
+  document.getElementById('wu-summary-auto').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      ${[['Total Tasks',total,'var(--blue-800)'],['Completed',done,'var(--green)'],
+         ['In Progress',inproc,'var(--amber)'],['High Priority Open',highOpen,'var(--red)'],
+         ['Missing Close Date',missing,'var(--orange)']].map(([l,v,c])=>`
+        <div style="padding:10px 12px;background:var(--gray-50);border-radius:6px;border:1px solid var(--gray-200);">
+          <div style="font-size:10px;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.06em;">${l}</div>
+          <div style="font-size:22px;font-weight:700;color:${c};font-family:var(--font-display);">${v}</div>
+        </div>`).join('')}
+    </div>`;
+
+  // Section 1
+  document.getElementById('wu-section1').innerHTML=`
+    <div class="wu-auto">
+      <div class="wu-auto-label">Counts from Activity Log</div>
+      ${[['Total tasks in log',total],['Completed (Done)',done],['In Progress',inproc],
+         ['High Priority Open',highOpen],['Missing Close Date',missing]].map(([l,v])=>`
+        <div class="wu-auto-item"><strong style="min-width:200px;">${l}:</strong> ${v}</div>`).join('')}
+    </div>`;
+
+  // Section 2 — done tasks
+  const doneTasks = tasks.filter(t=>t.status==='Done');
+  document.getElementById('wu-section2').innerHTML= doneTasks.length ?
+    `<div class="wu-auto">
+      <div class="wu-auto-label">Tasks marked Done</div>
+      ${doneTasks.slice(0,10).map(t=>`
+        <div class="wu-auto-item done">✓ &nbsp;<strong>${t.ref}</strong> — ${t.activity}</div>`).join('')}
+    </div>` : '<div style="color:var(--gray-500);font-size:12px;font-style:italic;">No tasks marked Done yet.</div>';
+
+  // Section 5 — high priority open
+  const highTasks = tasks.filter(t=>t.priority==='High'&&t.status!=='Done');
+  document.getElementById('wu-section5').innerHTML= highTasks.length ?
+    `<div class="wu-auto">
+      <div class="wu-auto-label">High Priority Open Tasks</div>
+      ${highTasks.map(t=>`
+        <div class="wu-auto-item high">⚠ &nbsp;<strong>${t.ref}</strong> — ${t.activity}${t.target?' [Target: '+fmtDate(t.target)+']':' [No target]'}</div>`).join('')}
+    </div>` : '<div style="color:var(--green);font-size:12px;">No high priority open tasks — all clear.</div>';
+}
+
+// ═══════════════════════════════════════════════════════════
+// EXPORT
+// ═══════════════════════════════════════════════════════════
+function exportReport() {
+  const data = JSON.stringify(tasks, null, 2);
+  const blob = new Blob([`IT Activity Report Data — Madaen Star Group\nExported: ${new Date().toLocaleString('en-GB')}\n\n${data}`], {type:'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `IT_Activity_Backup_${new Date().toISOString().split('T')[0]}.txt`;
+  a.click();
+}
+
+function exportWeekly() {
+  const preparer = document.getElementById('wu-preparer').value;
+  const weekDate = document.getElementById('wu-date').value;
+  const weekLabel = weekDate ? fmtDate(weekDate) : 'Not specified';
+  const blockers  = document.getElementById('wu-blockers').value;
+  const mgmt      = document.getElementById('wu-mgmt').value;
+  const next      = document.getElementById('wu-next').value;
+  const expected  = document.getElementById('wu-expected').value;
+  const narrative = document.getElementById('wu-narrative').value;
+  const flags     = document.getElementById('wu-flags').value;
+
+  const doneTasks = tasks.filter(t=>t.status==='Done');
+  const highTasks = tasks.filter(t=>t.priority==='High'&&t.status!=='Done');
+  const total=tasks.length, done=doneTasks.length, inproc=tasks.filter(t=>t.status==='In Process').length;
+  const highOpen=tasks.filter(t=>t.priority==='High'&&t.status!=='Done').length;
+  const missing=tasks.filter(t=>t.status==='Done'&&!t.close).length;
+
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8">
+<title>IT Weekly Update — ${weekLabel}</title>
+<style>
+body{font-family:Arial,sans-serif;max-width:900px;margin:2rem auto;color:#1C2333;font-size:13px;}
+h1{color:#0D2B4E;font-size:20px;margin-bottom:4px;}
+.sub{color:#6B7A8D;font-size:12px;margin-bottom:2rem;}
+.section{margin-bottom:1.5rem;}
+.sec-hdr{background:#1A3F6F;color:#fff;padding:8px 14px;font-size:12px;font-weight:700;border-radius:4px 4px 0 0;letter-spacing:0.04em;}
+.sec-body{border:1px solid #D8E0E8;border-top:none;padding:1rem;border-radius:0 0 4px 4px;}
+.auto-item{padding:3px 0;font-size:12px;}
+.done-item{color:#1A7A4A;font-size:12px;padding:2px 0;}
+.high-item{color:#B02020;font-weight:600;font-size:12px;padding:2px 0;}
+.kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:1rem;}
+.kpi{text-align:center;padding:10px;border:1px solid #D8E0E8;border-radius:4px;}
+.kpi-v{font-size:22px;font-weight:700;color:#0D2B4E;}
+.kpi-l{font-size:9px;color:#6B7A8D;text-transform:uppercase;letter-spacing:0.06em;}
+.manual{background:#F7F9FB;padding:10px;border-radius:4px;color:#3D4A5C;min-height:40px;white-space:pre-wrap;}
+hr{border:none;border-top:1px solid #D8E0E8;margin:1rem 0;}
+</style></head><body>
+<h1>IT Development — Weekly Update Report</h1>
+<div class="sub">Madaen Star Group Company &nbsp;|&nbsp; Week Ending: ${weekLabel} &nbsp;|&nbsp; Prepared by: ${preparer}</div>
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-v">${total}</div><div class="kpi-l">Total</div></div>
+  <div class="kpi"><div class="kpi-v" style="color:#1A7A4A">${done}</div><div class="kpi-l">Done</div></div>
+  <div class="kpi"><div class="kpi-v" style="color:#8A5A00">${inproc}</div><div class="kpi-l">In Progress</div></div>
+  <div class="kpi"><div class="kpi-v" style="color:#B02020">${highOpen}</div><div class="kpi-l">High Priority</div></div>
+  <div class="kpi"><div class="kpi-v" style="color:#7A3A00">${missing}</div><div class="kpi-l">Missing Close</div></div>
+</div>
+<div class="section"><div class="sec-hdr">2. Key Accomplishments</div><div class="sec-body">
+${doneTasks.slice(0,10).map(t=>`<div class="done-item">✓ <strong>${t.ref}</strong> — ${t.activity}</div>`).join('')}
+${narrative?`<hr><div class="manual">${narrative}</div>`:''}
+</div></div>
+<div class="section"><div class="sec-hdr">3. Blockers & Issues</div><div class="sec-body">
+<div style="font-size:11px;color:#6B7A8D;margin-bottom:6px;">Current blockers:</div>
+<div class="manual">${blockers||'None reported.'}</div>
+<div style="font-size:11px;color:#6B7A8D;margin:10px 0 6px;">Decision / support needed from management:</div>
+<div class="manual">${mgmt||'None.'}</div>
+</div></div>
+<div class="section"><div class="sec-hdr">4. Plan for Next Week</div><div class="sec-body">
+<div style="font-size:11px;color:#6B7A8D;margin-bottom:6px;">Priority tasks:</div>
+<div class="manual">${next||'To be determined.'}</div>
+<div style="font-size:11px;color:#6B7A8D;margin:10px 0 6px;">Expected completions:</div>
+<div class="manual">${expected||'To be determined.'}</div>
+</div></div>
+<div class="section"><div class="sec-hdr">5. Items for Management Attention</div><div class="sec-body">
+${highTasks.map(t=>`<div class="high-item">⚠ <strong>${t.ref}</strong> — ${t.activity} ${t.target?'[Target: '+fmtDate(t.target)+']':'[No target]'}</div>`).join('')}
+${flags?`<hr><div class="manual">${flags}</div>`:''}
+</div></div>
+</body></html>`;
+
+  const blob = new Blob([html],{type:'text/html'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `IT_Weekly_Update_${weekDate||'undated'}.html`;
+  a.click();
+}
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', ()=>{
+  loadTasks();
+  renderTaskTable();
+  renderDashboard();
+  resetForm();
+  setFormMode('add');
+  // Set default weekly date to next Thursday
+  const wu = new Date();
+  while(wu.getDay()!==4) wu.setDate(wu.getDate()+1);
+  document.getElementById('wu-date').value = wu.toISOString().split('T')[0];
+  renderWeekly();
+});
+</script>
+</body>
+</html>
